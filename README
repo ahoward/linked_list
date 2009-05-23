@@ -1,0 +1,24 @@
+NAME
+  linked_list.rb
+
+DESCRIPTION
+  a simple linked list implementation for ruby
+
+SYNOPSIS
+  ll = LinkedList[0,1,2]
+
+  ll.first #=> 0
+
+  ll.last #=> 2
+
+  node = ll.last_node
+
+  ll << 3 << 4
+
+  ll.remove(node)
+
+  ll #=> [0,1,3,4]
+
+  ll.push ll.shift
+  
+  ll #=> [1,3,4,0]
