@@ -45,11 +45,14 @@ class LinkedList
   end
 
   def push(object)
-    node = Node.new(object, @last.prev, @last)
+    push_node(Node.new(object, @last.prev, @last)).object
+  end
+
+  def push_node(node)
     @last.prev.next = node
     @last.prev = node
     @size += 1
-    object
+    node
   end
 
   def <<(object)
@@ -58,50 +61,66 @@ class LinkedList
   end
 
   def pop
+    pop_node.object
+  end
+
+  def pop_node
     raise('empty') if @size <= 0
     node = @last.prev
     node.prev.next = @last
     @last.prev = node.prev
     @size -= 1
-    node.object
+    node
   end
 
   def unshift(object)
-    node = Node.new(object, @first, @first.next)
+    unshift_node(Node.new(object, @first, @first.next)).object
+  end
+
+  def unshift_node(node)
     @first.next.prev = node
     @first.next = node
     @size += 1
-    object
+    node
   end
 
   def shift
+    shift_node.object
+  end
+
+  def shift_node
     raise('empty') if @size <= 0
     node = @first.next
     node.next.prev = @first
     @first.next = node.next
     @size -= 1
-    node.object
+    node
   end
 
-  def remove(node)
+  def remove_node(node)
     not_empty!
     node.prev.next = node.next
     node.next.prev = node.prev
+    node
   end
 
-  def each
+  def each_node
     node = @first.next
     while node != @last
-      yield node.object
+      yield node
       node = node.next
     end
     self
   end
 
-  def reverse_each
+  def each
+    each_node{|node| yield node.object}
+  end
+
+  def reverse_each_node
     node = @last
     loop do
-      yield node.object
+      yield node
       node = node.prev
       if ! node
         break
@@ -110,7 +129,11 @@ class LinkedList
     self
   end
 
-  alias_method '__inspect__', 'inspect' unless instance_methods.include('__inspect__')
+  def reverse_each
+    reverse_each_node{|node| yield node.object}
+  end
+
+  alias_method '__inspect__', 'inspect' unless instance_methods.include?('__inspect__')
 
   def inspect
     to_a.inspect
